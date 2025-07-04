@@ -1,39 +1,28 @@
 package com.example.springboot_demo.model;
 
 public class Employee {
-    private int userid;
+    private int empid;
     private String name;
     private String job;
 
     // Parameterized constructor
-    public Employee(int userid, String name, String job) {
-        this.userid = userid;
+    public Employee(int empid, String name, String job) {
+        this.empid = empid;
         this.name = name;
         this.job = job;
     }
 
-    // Getters and Setters
+    // Getters
     public int getUserid() {
-        return userid;
-    }
-
-    public void setUserid(int userid) {
-        this.userid = userid;
+        return empid;
     }
 
     public String getName() {
         return name;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
     public String getJob() {
         return job;
     }
 
-    public void setJob(String job) {
-        this.job = job;
-    }
 }

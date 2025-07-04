@@ -2,36 +2,37 @@ package com.example.springboot_demo.controller;
 
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RestController;
-
 import com.example.springboot_demo.service.Employeeservice;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+
 import com.example.springboot_demo.model.*;
 
 @RestController
 public class Employeecontroller {
     @Autowired
-    Employeeservice hws;
-    @GetMapping("/h")
-    public List<Employee> hello() {
-        return hws.helloWorld();
+    Employeeservice service;
+    @GetMapping("/")
+    public List<Employee> getAllEmployees() {
+        return service.getEmployees();
     }
+
+
+    @PostMapping("/")
+    public String postMethod() {
+        return service.postEmployee();
+    }
+
 
     @PutMapping("/")
     public String putMethod() {
-        return hws.putMethod();
+        return service.putMethod();
     }
-    @PostMapping("/")
-    public String postMethod() {
-        return hws.postMethod();
-    }
+
+
     @DeleteMapping("/")
     public String deleteMethod() {
-        return hws.deleteMethod();
+        return service.deleteMethod();
     }
-    @PostMapping("/employee")
-    public String addEmployee(@RequestBody Employee emp) {
-        return hws.addEmployee(emp);
-    }
+
 }
