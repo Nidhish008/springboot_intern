@@ -15,21 +15,26 @@ public class Student {
 
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
-    private int studentid;
+    private Integer id;
 
     private String studentName;
     private String studentEmail;
     private String studentPhone;
 
-    public Student(int studentid, String studentName, String studentEmail, String studentPhone) {
-        this.studentid = studentid;
+    public Student(){
+
+    }
+
+
+    public Student(int id, String studentName, String studentEmail, String studentPhone) {
+        this.id = id;
         this.studentName = studentName;
         this.studentEmail = studentEmail;
         this.studentPhone = studentPhone;
     }
 
-    public int getStudentid() {
-        return studentid;
+    public int getId() {
+        return id;
     }
 
     public String getStudentName() {

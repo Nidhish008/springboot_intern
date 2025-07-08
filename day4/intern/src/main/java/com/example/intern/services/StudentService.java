@@ -21,7 +21,7 @@ public class StudentService {
     }
 
     public Student getStudentbyId(int id){
-        return repo.findReferenceByStudentid(id);
+        return repo.findById(id);
     }
 
     public List<Student> getStudentbyName(String name){
@@ -36,7 +36,7 @@ public class StudentService {
     public String updateStudent(int id,Student student){
         List<Student> students = repo.findAll();
         for(Student s : students){
-            if(s.getStudentid() == id){
+            if(s.getId() == id){
                 repo.deleteById(id);
                 repo.save(student);
                 return "Student updated successfully";
@@ -47,6 +47,6 @@ public class StudentService {
 
     public String deleteStudent(int id){
         repo.deleteById(id);
-        return "Student not found";
+        return "Student deleted successfully";
     }
 }
