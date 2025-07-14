@@ -1,11 +1,16 @@
 package com.example.Springboot.service;
 
+import com.example.Springboot.jwt.JwtTokenProvider;
 import com.example.Springboot.model.RegisterDetails;
 import com.example.Springboot.model.Roles;
 import com.example.Springboot.model.UserDetailsDto;
 import com.example.Springboot.repository.RegisterDetailsRepository;
+import com.example.Springboot.repository.RegisterRepository;
 import com.example.Springboot.repository.RoleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -50,19 +55,20 @@ public class AuthService {
         return "User registered successfully!";
     }
 
-    public String authenticate(UserDetailsDto login) {
-        Optional<RegisterDetails> optionalUser = regRepo.findByEmail(login.getEmail());
+    public String authenticate(RegisterDetails login) {
+//      This triggers Spring Security:
+//      Calls your CustomUserDetailsService.loadUserByUsername()
+        Authentication authentication =
+                AuthenticationManager.authenticate(
+                        new UsernamePasswordAuthenticationToken(
+                                login.getUsername(), login.getPassword()
+                        )
+                );
+        return JwtTokenProvider.generateToken(authentication);
+    }
 
-        if (optionalUser.isPresent()) {
-            RegisterDetails user = optionalUser.get();
-            if (passwordEncoder.matches(login.getPassword(), user.getPassword())) {
-                return "User logged in successfully!";
-            } else {
-                return "User Login Failed!";
-            }
-        } else {
-            return "User not found!";
-        }
+    public Optional<RegisterDetails> findByUserByUsername(String userName) {
+        return regRepo.findByUsername(userName);
     }
 
 
