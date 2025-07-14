@@ -1,6 +1,7 @@
 package com.example.Springboot.service;
 
 import com.example.Springboot.jwt.JwtTokenProvider;
+import com.example.Springboot.model.JwtResponse;
 import com.example.Springboot.model.RegisterDetails;
 import com.example.Springboot.model.Roles;
 import com.example.Springboot.model.UserDetailsDto;
@@ -18,6 +19,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 public class AuthService {
@@ -27,6 +29,8 @@ public class AuthService {
 
     @Autowired
     private RoleRepository roleRepo;
+    @Autowired
+    private JwtTokenProvider jwtTokenProvider;
 
     public List<RegisterDetails> getRegisterDetails() {
         return regRepo.findAll();
@@ -55,21 +59,22 @@ public class AuthService {
         return "User registered successfully!";
     }
 
-    public String authenticate(RegisterDetails login) {
-//      This triggers Spring Security:
-//      Calls your CustomUserDetailsService.loadUserByUsername()
-        Authentication authentication =
-                AuthenticationManager.authenticate(
-                        new UsernamePasswordAuthenticationToken(
-                                login.getUsername(), login.getPassword()
-                        )
-                );
-        return JwtTokenProvider.generateToken(authentication);
-    }
 
     public Optional<RegisterDetails> findByUserByUsername(String userName) {
         return regRepo.findByUsername(userName);
     }
 
+    public JwtResponse authenticate(RegisterDetails registerDetails) {
+        Authentication auth=AuthenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(registerDetails.getUsername(),registerDetails.getPassword())
+        );
+        String token=jwtTokenProvider.generateToken(auth);
+        String username=registerDetails.getUsername();
+        List<String> roles=Authentication.getAuthorities().stream()
+                .map(role->role.getAuthority())
+                .collect(Collectors.toList());
+        String joinedRoles=String.join(",",roles);
+        return new JwtResponse(token,username,joinedRoles);
 
+    }
 }
