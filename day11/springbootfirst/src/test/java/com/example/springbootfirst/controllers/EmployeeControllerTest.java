@@ -55,5 +55,28 @@ class EmployeeControllerTest {
         assertEquals(empid,result.getEmpId());
     }
 
+    @Test
+    void testaddnewEmployee(){
+        UserDetailsDto user = new UserDetailsDto();
+        user.setName("Nidhish");
+        user.setEmail("Nid@email.com");
+        user.setPassword("nid@2005");
+        String expectedMessage = "Employee added successfully";
+        when(employeeService.addEmployee(user)).thenReturn(expectedMessage);
+        String result = employeeController.addEmployee(user);
+        assertEquals(expectedMessage, result);
+    }
+
+    @Test
+    void testupdateEmployee(){
+        int empId = 1;
+        UserDetailsDto user = new UserDetailsDto();
+        user.setName("Nidhish");
+        user.setEmail("Nid@email.com");
+        String expectedMessage = "Employee updated successfully";
+        when(employeeService.updateEmployee(empId, user)).thenReturn(expectedMessage);
+        String result = employeeController.updateEmployee(empId, user);
+        assertEquals(expectedMessage, result);
+    }
 
 }
